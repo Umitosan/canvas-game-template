@@ -64,8 +64,8 @@ function Box(x,y,color,size) {
   this.y = y;
   this.color = color;
   this.size =  size;
-  this.prevStatus = 'off';
-  this.curStatus = 'off';
+  this.xVel = 1;
+  this.yVel = 1;
 
   this.draw = function() {
     ctx.beginPath();
@@ -74,6 +74,13 @@ function Box(x,y,color,size) {
     ctx.fill();
     // ctx.stroke();
   };
+
+  this.update = function() {
+    console.log('boxy up');
+    this.x += this.xVel;
+    this.y += this.yVel;
+  };
+
 } // end box
 
 function Game(updateDur) {
@@ -82,23 +89,15 @@ function Game(updateDur) {
   this.updateDuration = updateDur; // milliseconds duration between update()
   this.paused = false;
   this.bg = new Image();
-  this.lastKey = 0;
+  this.boxy = undefined;
   this.pausedTxt = undefined;
-  this.grid = undefined;
-  this.boxSize = 10;
-  this.gridWidth = 81;
-  this.gridHeight = 60;
-  this.curBoxC = 0;
-  this.curBoxR = 0;
   this.mode = 'init';
-  this.boxColorOn = 'RGB(127, 255, 212)';
-  this.boxColorOff = 'RGBA(126, 126, 126, 1)';
 
   this.init = function() {
     this.bg.src = 'bg1.png';
+    this.boxy = new Box(20,20,myColors.red,20);
     this.lastUpdate = performance.now();
   };
-
 
   this.pauseIt = function() {
     // console.log('GAME paused');
@@ -132,6 +131,7 @@ function Game(updateDur) {
 
   this.draw = function() {
     // draw everything!
+    this.boxy.draw();
   }; // end draw
 
   this.update = function() {
@@ -141,7 +141,11 @@ function Game(updateDur) {
             if ( this.timeGap >= this.updateDuration ) { // this update is restricted to updateDuration
               let timesToUpdate = this.timeGap / this.updateDuration;
               for (let i=1; i < timesToUpdate; i++) { // update children objects
+                if (timesToUpdate > 2) {
+                  console.log('timesToUpdate = ', timesToUpdate);
+                }
                 // general update area
+                this.boxy.update();
               }
               this.lastUpdate = performance.now();
             } // end if
@@ -179,8 +183,8 @@ function getRandomIntInclusive(min, max) {
 function generalLoopReset() {
   if (State.myReq !== undefined) {  // reset game loop if already started
     cancelAnimationFrame(State.myReq);
-    softReset();
   }
+  softReset();
   myGame = new Game(State.simSpeed); // ms per update()
   myGame.init();
   State.myReq = requestAnimationFrame(gameLoop);
@@ -265,7 +269,6 @@ function mUp(evt) {
   }
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////
 // GAME LOOP
 //////////////////////////////////////////////////////////////////////////////////
@@ -319,13 +322,13 @@ $(document).ready(function() {
   $('#start-btn').click(function() {
     console.log("start button clicked");
     if (myGame.mode === 'draw') {
-      myGame.simStart = performance.now();
       myGame.mode = 'sim';
       State.gameStarted = true;
-      $('#mode-current-status')[0].innerText = 'Simulate';
+      $('#mode-current-status')[0].innerText = 'simulate';
       let v = $('#speed-slider').val();
       $('#speed-input').prop("value", v);
       myGame.updateDuration = (1000/v);
+      myGame.lastUpdate = performance.now();
     } else {
       console.log('must reset before starting again');
     }
@@ -335,7 +338,7 @@ $(document).ready(function() {
     console.log("reset button clicked");
     generalLoopReset();
     State.loopRunning = true;
-    State.gameStarted = true;
+    State.gameStarted = false;
     myGame.mode = 'draw';
     $('#pause-btn')[0].innerText = 'PAUSE';
     $('#mode-current-status')[0].innerText = 'draw';

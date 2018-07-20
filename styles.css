@@ -71,20 +71,15 @@ body {
   margin: auto auto auto auto;
   text-align: center;
   font-family: 'Roboto', sans-serif;
+  font-size: 20px;
   /* outline-color: yellow;
   outline-style: solid;
   outline-width: 1px; */
 }
-#mode-label {
-  font-size: 20px;
-  margin: auto 10px auto auto;
-}
-#mode-current-status {
-  font-size: 20px;
-}
 .lastkey-container {
   margin: auto auto auto auto;
   font-size: 20px;
+  text-align: center;
   font-family: 'Roboto', sans-serif;
   /* outline-color: yellow;
   outline-style: solid;
@@ -95,7 +90,6 @@ body {
 }
 .coords-container {
   margin: auto auto auto auto;
-  height: auto;
   font-size: 20px;
   font-family: 'Roboto', sans-serif;
   /* outline-color: yellow;
