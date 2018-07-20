@@ -1,6 +1,8 @@
 /*jshint esversion: 6 */
 
 var CANVAS,
+    canH,
+    canW,
     ctx,
     myGame;
 var myColors = new Colors();
@@ -41,7 +43,6 @@ function softReset() {
     mouseLeftDown: false,
     mouseRightDown: false
   };
-
 }
 
 function Colors() {
@@ -64,8 +65,8 @@ function Box(x,y,color,size) {
   this.y = y;
   this.color = color;
   this.size =  size;
-  this.xVel = 1;
-  this.yVel = 1;
+  this.xVel = 10;
+  this.yVel = -10;
 
   this.draw = function() {
     ctx.beginPath();
@@ -76,7 +77,23 @@ function Box(x,y,color,size) {
   };
 
   this.update = function() {
-    console.log('boxy up');
+    // console.log('boxy up');
+    if ((this.xVel > 0) && ((this.x + this.size + this.xVel) > canW)) {
+      console.log('bounds right');
+      this.xVel *= -1;
+    }
+    if ((this.xVel < 0) && ((this.x + this.xVel) < 0)) {
+      console.log('bounds left');
+      this.xVel *= -1;
+    }
+    if ((this.yVel > 0) && ((this.y + this.size + this.yVel) > canH)) {
+      console.log('bounds bottom');
+      this.yVel *= -1;
+    }
+    if ((this.yVel < 0) && ((this.y + this.yVel) < 0)) {
+      console.log('bounds top');
+      this.yVel *= -1;
+    }
     this.x += this.xVel;
     this.y += this.yVel;
   };
@@ -141,9 +158,9 @@ function Game(updateDur) {
             if ( this.timeGap >= this.updateDuration ) { // this update is restricted to updateDuration
               let timesToUpdate = this.timeGap / this.updateDuration;
               for (let i=1; i < timesToUpdate; i++) { // update children objects
-                if (timesToUpdate > 2) {
-                  console.log('timesToUpdate = ', timesToUpdate);
-                }
+                // if (timesToUpdate > 2) {
+                //   console.log('timesToUpdate = ', timesToUpdate);
+                // }
                 // general update area
                 this.boxy.update();
               }
@@ -293,6 +310,8 @@ $(document).ready(function() {
 
   CANVAS =  $('#canvas')[0];
   ctx =  CANVAS.getContext('2d');
+  canH = CANVAS.height;
+  canW = CANVAS.width;
   // CANVAS.addEventListener('keydown',keyDown,false);
   canvas.addEventListener("mousedown", mDown, false);
   canvas.addEventListener("mouseup", mUp, false);
