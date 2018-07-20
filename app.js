@@ -187,6 +187,54 @@ function generalLoopReset() {
 }
 
 //////////////////////////////////////////////////////////////////////////////////
+// KEYBINDINGS
+//////////////////////////////////////////////////////////////////////////////////
+function keyDown(event) {
+    event.preventDefault(); // prevents page from scrolling within window frame
+    myGame.lastKey = event.keyCode;
+    let code = event.keyCode;
+    switch (code) {
+        case 37: // Left key
+          if (myGame.paused === false) {
+            State.lastKey = 'left';
+          }
+          break;
+        case 39: //Right key
+          if (myGame.paused === false) {
+            State.lastKey = 'right';
+          }
+          break;
+        case 38: // Up key
+          if (myGame.paused === false) {
+            State.lastKey = 'up';
+          }
+          break;
+        case 40: //Down key
+          if (myGame.paused === false) {
+            State.lastKey = 'down';
+          }
+          break;
+        case 32: // spacebar
+          State.lastKey = 'spacebar';
+          if (myGame.paused === true) {
+            myGame.unpauseIt();
+          } else if (myGame.paused === false) {
+            myGame.pauseIt();
+          } else {
+            //nothin
+          }
+          console.log('Game pause state = ', myGame.paused);
+          break;
+        default: // Everything else
+          console.log("key = ", code);
+          console.log('key down evt ... ');
+          console.dir(event);
+          State.lastKey = code;
+          break;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////
 // MOUSE INPUT
 //////////////////////////////////////////////////////////////////////////////////
 function mDown(evt) {

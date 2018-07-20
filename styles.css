@@ -55,45 +55,59 @@ body {
 #pause-btn {}
 #reset-btn {}
 
+
 .status-container {
-  margin: 12px auto 0px auto;
-  width: 480px;
-  height: 80px;
+  display: grid;
+  margin: 12px auto 12px auto;
+  width: 600px;
+  height: 100px;
+  grid-template-columns: 200px 200px 200px;
+  grid-template-rows: 100px;
   /* outline-color: green;
   outline-style: solid;
   outline-width: 1px; */
 }
 .mode-container {
-  display: flex;
-  float: left;
-  width: auto;
+  margin: auto auto auto auto;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
   /* outline-color: yellow;
   outline-style: solid;
   outline-width: 1px; */
 }
 #mode-label {
-  font-size: 26px;
+  font-size: 20px;
   margin: auto 10px auto auto;
 }
 #mode-current-status {
-  font-size: 50px;
+  font-size: 20px;
 }
-.debug-container {
-  float: right;
-  width: 140px;
-  height: auto;
+.lastkey-container {
+  margin: auto auto auto auto;
+  font-size: 20px;
   font-family: 'Roboto', sans-serif;
-  /* outline-color: blue;
+  /* outline-color: yellow;
+  outline-style: solid;
+  outline-width: 1px; */
+}
+#lastkey-label {
+
+}
+.coords-container {
+  margin: auto auto auto auto;
+  height: auto;
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+  /* outline-color: yellow;
   outline-style: solid;
   outline-width: 1px; */
 }
 #coords {
-  margin: 10px auto auto auto;
+  margin: auto auto auto auto;
   text-align: center;
-  font-size: 16px;
+  font-size: 20px;
 }
-#coords-x {}
-#coords-y {}
+
 
 input[type=range]{
     -webkit-appearance: none;
