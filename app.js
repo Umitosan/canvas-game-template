@@ -78,19 +78,15 @@ function Box(x,y,color,size,vel) {
 
   this.update = function() {
     if ((this.xVel > 0) && ((this.x + this.size + this.xVel) > canW)) {
-      // console.log('bounds right');
       this.xVel *= -1;
     }
     if ((this.xVel < 0) && ((this.x + this.xVel) < 0)) {
-      // console.log('bounds left');
       this.xVel *= -1;
     }
     if ((this.yVel > 0) && ((this.y + this.size + this.yVel) > canH)) {
-      // console.log('bounds bottom');
       this.yVel *= -1;
     }
     if ((this.yVel < 0) && ((this.y + this.yVel) < 0)) {
-      // console.log('bounds top');
       this.yVel *= -1;
     }
     this.x += this.xVel;
@@ -129,7 +125,7 @@ function Game(updateDur) {
 
   this.drawBG = function() { // display background over canvas
     ctx.imageSmoothingEnabled = false;  // turns off AntiAliasing
-    ctx.drawImage(this.bg,4,4,CANVAS.width-10,CANVAS.height-10);
+    ctx.drawImage(this.bg,0,0,CANVAS.width,CANVAS.height);
   };
 
   this.draw = function() {  // draw everything!
@@ -193,13 +189,13 @@ function generalLoopReset() {
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-// KEYBINDINGS
+// KEYBOARD INPUT
 //////////////////////////////////////////////////////////////////////////////////
 function keyDown(event) {
-    console.log('key');
     event.preventDefault(); // prevents page from scrolling within window frame
     myGame.lastKey = event.keyCode;
     let code = event.keyCode;
+    // console.log('key');
     // console.dir(event);
     // console.log("key code = ", code);
     switch (code) {
@@ -301,7 +297,7 @@ $(document).ready(function() {
   $('body').on('contextmenu', '#canvas', function(e){ return false; }); // prevent right click context menu default action
   CANVAS.addEventListener('mousemove', function(evt) {
       let rect = CANVAS.getBoundingClientRect();
-      State.mouseX = evt.clientX - rect.left;
+      State.mouseX = evt.clientX - rect.left + -0.5;
       State.mouseY = evt.clientY - rect.top;
       $("#coords-x").text(State.mouseX);
       $("#coords-y").text(State.mouseY);
@@ -313,10 +309,11 @@ $(document).ready(function() {
   // this is to correct for canvas blurryness on single pixel wide lines etc
   // important when animating to reduce rendering artifacts and other oddities
   // ctx.translate(0.5, 0.5);
-  ctx.translate(1, 1);
 
   // start things up!
-  generalLoopReset();
+  myGame = new Game(State.simSpeed); // ms per update()
+  myGame.init();
+  State.myReq = requestAnimationFrame(gameLoop);
   State.loopRunning = true;
   State.gameStarted = false;
   myGame.mode = 'draw';
