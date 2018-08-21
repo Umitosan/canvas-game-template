@@ -60,13 +60,13 @@ function Colors() {
   this.electricBlue = 'rgba(20, 30, 230, 1)';
 }
 
-function Box(x,y,color,size) {
+function Box(x,y,color,size,vel) {
   this.x = x;
   this.y = y;
   this.color = color;
   this.size =  size;
-  this.xVel = 10;
-  this.yVel = -10;
+  this.xVel = vel;
+  this.yVel = vel;
 
   this.draw = function() {
     ctx.beginPath();
@@ -77,21 +77,20 @@ function Box(x,y,color,size) {
   };
 
   this.update = function() {
-    // console.log('boxy up');
     if ((this.xVel > 0) && ((this.x + this.size + this.xVel) > canW)) {
-      console.log('bounds right');
+      // console.log('bounds right');
       this.xVel *= -1;
     }
     if ((this.xVel < 0) && ((this.x + this.xVel) < 0)) {
-      console.log('bounds left');
+      // console.log('bounds left');
       this.xVel *= -1;
     }
     if ((this.yVel > 0) && ((this.y + this.size + this.yVel) > canH)) {
-      console.log('bounds bottom');
+      // console.log('bounds bottom');
       this.yVel *= -1;
     }
     if ((this.yVel < 0) && ((this.y + this.yVel) < 0)) {
-      console.log('bounds top');
+      // console.log('bounds top');
       this.yVel *= -1;
     }
     this.x += this.xVel;
@@ -112,17 +111,15 @@ function Game(updateDur) {
 
   this.init = function() {
     this.bg.src = 'bg1.png';
-    this.boxy = new Box(20,20,myColors.red,20);
+    this.boxy = new Box(20,20,myColors.red,20,1);
     this.lastUpdate = performance.now();
   };
 
   this.pauseIt = function() {
-    // console.log('GAME paused');
     myGame.paused = true;
     // this.pausedTxt.show = true;
   };
   this.unpauseIt = function() {
-    // console.log('GAME un-paused');
     myGame.paused = false;
     // this.pausedTxt.show = false;
     // this prevents pac from updating many times after UNpausing
@@ -130,24 +127,12 @@ function Game(updateDur) {
     this.timeGap = 0;
   };
 
-  this.clearGrid = function() {
-    console.log('clearGrid');
-    for (let c = 0; c < this.gridWidth-1; c++) {
-      for (let r = 0; r < this.gridHeight-1; r++) {
-        this.grid[r][c].color = this.boxColorOff;
-        this.grid[r][c].curStatus = 'off';
-        this.grid[r][c].prevStatus = 'off';
-      }
-    }
-  };
-
   this.drawBG = function() { // display background over canvas
     ctx.imageSmoothingEnabled = false;  // turns off AntiAliasing
     ctx.drawImage(this.bg,4,4,CANVAS.width-10,CANVAS.height-10);
   };
 
-  this.draw = function() {
-    // draw everything!
+  this.draw = function() {  // draw everything!
     this.boxy.draw();
   }; // end draw
 
@@ -167,11 +152,11 @@ function Game(updateDur) {
               this.lastUpdate = performance.now();
             } // end if
 
-            if (this.mode === "draw") { // run this every update cycle regardless of timing
-              // general draw area
-            } else {
-              // mode is none
-            }
+            // if (this.mode === "draw") { // run this every update cycle regardless of timing
+            //   // general draw area
+            // } else {
+            //   // mode is none
+            // }
 
       } else if (this.paused === true) {
         // PAUSED! do nothin
@@ -211,9 +196,12 @@ function generalLoopReset() {
 // KEYBINDINGS
 //////////////////////////////////////////////////////////////////////////////////
 function keyDown(event) {
+    console.log('key');
     event.preventDefault(); // prevents page from scrolling within window frame
     myGame.lastKey = event.keyCode;
     let code = event.keyCode;
+    // console.dir(event);
+    // console.log("key code = ", code);
     switch (code) {
         case 37: // Left key
           if (myGame.paused === false) {
@@ -247,19 +235,17 @@ function keyDown(event) {
           console.log('Game pause state = ', myGame.paused);
           break;
         default: // Everything else
-          console.log("key = ", code);
-          console.log('key down evt ... ');
-          console.dir(event);
           State.lastKey = code;
           break;
     }
+    $("#lastkey-name").text("'"+event.code+"'");
+    $("#lastkey-code").text(event.keyCode);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 // MOUSE INPUT
 //////////////////////////////////////////////////////////////////////////////////
 function mDown(evt) {
-  if (myGame.mode === "draw") {
     if (evt.button === 0) {  // left-click
       // console.log('MOUSE: left down');
       if (State.mouseRightDown === false) { State.mouseLeftDown = true; } // only allow one mouse button down at a time, ignore change if both are down
@@ -267,13 +253,9 @@ function mDown(evt) {
       // console.log('MOUSE: right down');
       if (State.mouseLeftDown === false) { State.mouseRightDown = true; }
     }
-  } else {
-    console.log('game not in draw mode');
-  }
 }
 
 function mUp(evt) {
-  if (myGame.mode === "draw") {
     if (evt.button === 0) {  // left-click
       // console.log('MOUSE: left up');
       State.mouseLeftDown = false;
@@ -281,9 +263,6 @@ function mUp(evt) {
       // console.log('MOUSE: left up');
       State.mouseRightDown = false;
     }
-  } else {
-    console.log('game not in draw mode');
-  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -308,15 +287,19 @@ function gameLoop(timestamp) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $(document).ready(function() {
 
+  function test() {
+    console.log('test works');
+  }
+
   CANVAS =  $('#canvas')[0];
   ctx =  CANVAS.getContext('2d');
   canH = CANVAS.height;
   canW = CANVAS.width;
-  // CANVAS.addEventListener('keydown',keyDown,false);
-  canvas.addEventListener("mousedown", mDown, false);
-  canvas.addEventListener("mouseup", mUp, false);
+  CANVAS.addEventListener("keydown",keyDown);
+  CANVAS.addEventListener("mousedown", mDown);
+  CANVAS.addEventListener("mouseup", mUp);
   $('body').on('contextmenu', '#canvas', function(e){ return false; }); // prevent right click context menu default action
-  canvas.addEventListener('mousemove', function(evt) {
+  CANVAS.addEventListener('mousemove', function(evt) {
       let rect = CANVAS.getBoundingClientRect();
       State.mouseX = evt.clientX - rect.left;
       State.mouseY = evt.clientY - rect.top;
@@ -342,6 +325,7 @@ $(document).ready(function() {
     console.log("start button clicked");
     if (myGame.mode === 'draw') {
       myGame.mode = 'sim';
+      console.log('mode now sim');
       State.gameStarted = true;
       $('#mode-current-status')[0].innerText = 'simulate';
       let v = $('#speed-slider').val();

@@ -18,7 +18,7 @@
       </div>
 
       <div class="speed-container">
-        <span class="speed-label">Speed</span>
+        <span class="speed-label">Game Speed</span>
         <input id="speed-slider" type="range" name="speed-slider" min="1" max="200" step="1" value="3">
         <input id="speed-input" type="number" name="speed-input" value="3" min="1" max="200">
         <span class="speed-label">(updates/sec)</span>
@@ -35,10 +35,12 @@
         </div>
         <div class="lastkey-container">
           <div>
-            Last Key:
+            "Last Key" (key code):
           </div>
           <div>
-            <span id="lastkey-status">---</span>
+            <span id="lastkey-name">---</span>
+            -
+            <span id="lastkey-code">---</span>
           </div>
         </div>
         <div class="coords-container">
@@ -60,13 +62,13 @@
       </div>
 
       <div class="canvas-container">
-        <canvas id="canvas" width="800" height="600"></canvas>
+        <canvas id="canvas" tabindex='1' width="800" height="600"></canvas>
       </div>
 
     </div>
   <footer>
     <div class="social-container">
-      <a href="https://github.com/Umitosan/game_of_life">
+      <a href="https://github.com/Umitosan/canvas-game-template">
         <img id="git-img" border="0" src="giticon.png" alt="github-icon">
       </a>
     </div>
