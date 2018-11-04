@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="scripts/helpers.js"></script>
+    <script type="text/javascript" src="scripts/game.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto|Shrikhand" rel="stylesheet">
     <link rel="stylesheet" href="styles.css"  type="text/css" >
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -51,6 +53,33 @@
             <div>
               X: <span id="coords-x">0</span> Y: <span id="coords-y">0</span>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="keys-container">
+        <div class="keys-main">
+          <div class="keys-group-dir">
+            <div class="keys-item ki-title">
+              WASD
+            </div>
+            <div class="keys-item gap"></div>
+            <div class="keys-item" id="key-W">W</div>
+            <div class="keys-item gap"></div>
+            <div class="keys-item" id="key-A">A</div>
+            <div class="keys-item" id="key-S">S</div>
+            <div class="keys-item" id="key-D">D</div>
+          </div>
+          <div class="keys-group-dir">
+            <div class="keys-item ki-title">
+              Arrows
+            </div>
+            <div class="keys-item gap"></div>
+            <div class="keys-item" id="key-up">Up</div>
+            <div class="keys-item gap"></div>
+            <div class="keys-item" id="key-left">Left</div>
+            <div class="keys-item" id="key-down">Down</div>
+            <div class="keys-item" id="key-right">Right</div>
           </div>
         </div>
       </div>
